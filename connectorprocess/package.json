@@ -1,0 +1,14 @@
+{
+  "name": "connectorprocess",
+  "version": "1.0.0",
+  "description": "It process the connector",
+  "main": "connectorprocess.js",
+  "oracleMobile": {
+    "dependencies": {
+      "apis": {},
+      "connectors": {
+        "/mobile/connector/GetPerson": "1.0"
+      }
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "interaction_ora",
+  "version": "1.0.0",
+  "description": "Api for the interacion with other systems",
+  "main": "interaction_ora.js",
+  "dependencies": {
+    "joi": "^9.2.0",
+    "log4js": "^1.1.1"
+  },
+  "oracleMobile": {
+    "dependencies": {
+      "apis": {"/mobile/custom/ConnectorProcess":"18.2.3"},
+      "connectors": {}
+    }
+  }
+}

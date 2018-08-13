@@ -1,0 +1,37 @@
+
+{
+    "apiName":"interaction_ora",
+    "apiVersion":"18.2.3",
+    "apiId":"973dc7f2-f2ae-42e7-bb9d-d21c3f724b82",
+    "baseUrl":"https://AF89D6BCB6DB482F871C63CDA0F89FC9.mobile.ocp.oraclecloud.com:443",
+    "tokenEndpoint":"https://idcs-0576435cee0d4d0ebe91fa8273dd8db6.identity.oraclecloud.com/oauth2/v1/token",
+    "backend":{
+        "backendId":"<YOUR_BACKEND_ID>",
+        "backendName":"<YOUR_BACKEND_NAME>",
+        "backendVersion":"<YOUR_BACKEND_VERSION>",
+        "authorization":{
+            "anonymousKey":"<BACKEND_ANONYMOUS_KEY>",
+            "clientId":"<BACKEND_CLIENT_ID>",
+            "clientSecret":"<BACKEND_CLIENT_SECRET>"
+        }
+    },
+    "tools":{
+        "deployment":{
+            "tempDirectory":"c:\\tmp\\mcs-deploy"
+        },
+        "authorization":{
+            "clientId":"<OMCE_TM_APP_CLIENT_ID>",
+            "clientSecret":"<OMCE_TM_APP_CLIENT_SECRET>"
+        }
+    },
+    "container":{
+        "oracleMobileApiName":"OracleMobileAPI",
+        "port":4000
+    },
+    "tests":{
+        "getComponents":{
+            "method":"GET",
+            "resource":"/components"
+        }
+    }
+}
