@@ -1,0 +1,29 @@
+metadata:
+  platformVersion: 1.0
+main: true
+name: OraBot
+context:
+  variables:
+    greeting: "string"
+    name: "string"
+states:
+  intent:
+    component: "System.Intent"
+    properties:
+      variable: "iResult"
+      confidenceThreshold: 0.4
+    transitions:
+      actions:
+        Saludar: "askName"
+        Despedirse: "saySomething"
+  askName:
+    component: "System.Text"
+    properties:
+     prompt: "Cuál es tu código?"
+     variable: "name"
+  saySomething:
+    component: "debt.person"
+    properties:
+      name: "${name.value}"
+    transitions:
+      return: "done"
