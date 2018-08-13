@@ -48,8 +48,7 @@ b.	Metadata URL: Url donde está la Metadata del API
 c.	Anonymous Key: Esta información se encuentra en la configuración del BackEnd, incluir al final de la url lo siguiente: “/components”
 20.	Se modifica el flujo de tal manera que se utilice el Componente previamente creado
 Ejemplo de flujo 
-#metadata: information about the flow
-#  platformVersion: the version of the bots platform that this flow was written to work with 
+
 metadata:
   platformVersion: 1.0
 main: true
