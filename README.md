@@ -47,34 +47,3 @@ a.	Backend ID: Esta información se encuentra en la configuración del BackEnd
 b.	Metadata URL: Url donde está la Metadata del API
 c.	Anonymous Key: Esta información se encuentra en la configuración del BackEnd, incluir al final de la url lo siguiente: “/components”
 20.	Se modifica el flujo de tal manera que se utilice el Componente previamente creado
-Ejemplo de flujo 
-
-metadata:
-  platformVersion: 1.0
-main: true
-name: OraBot
-context:
-  variables:
-    greeting: "string"
-    name: "string"
-states:
-  intent:
-    component: "System.Intent"
-    properties:
-      variable: "iResult"
-      confidenceThreshold: 0.4
-    transitions:
-      actions:
-        Saludar: "askName"
-        Despedirse: "saySomething"
-  askName:
-    component: "System.Text"
-    properties:
-     prompt: "What is your name?"
-     variable: "name"
-  saySomething:
-    component: "debt.person"
-    properties:
-      name: "${name.value}"
-    transitions:
-      return: "done"
