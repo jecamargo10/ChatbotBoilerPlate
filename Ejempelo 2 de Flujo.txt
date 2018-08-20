@@ -1,0 +1,560 @@
+
+OTRO FLUJO 
+#metadata: information about the flow
+#  platformVersion: the version of the bots platform that this flow was written to work with 
+metadata:
+  platformVersion: 1.0
+main: true
+name: TestingBot
+context:
+  variables:
+    greeting: "string"
+    name: "string"
+    algo: "string"
+states:
+  askName:
+    component: "System.Text"
+    properties:
+     prompt: "Hola,Bienvenido al Bot de Tuya ¿Cuál es tu nombre?"
+     variable: "name"
+  askGreeting:
+    component: "System.List"
+    properties:
+      options: "Info de Tarjetas, Mi cuenta, Convenios"
+      prompt: "¿Cómo te puedo ayudar?"
+      variable: "greeting"     
+  oauthAccountLink:
+    component: "System.OAuthAccountLink"
+    properties: 
+      prompt: "Estas accediendo al portal Transaccional, por favor ${name.value} Ingresa con tu usuario"
+      variable: "algo"
+      authorizeURL: https://www.facebook.com/v3.1/dialog/oauth?app_id=275091489888118&redirect_uri=https://AMCE8337227628bmxp-gse00014254.mobile.ocp.oraclecloud.com/connectors/v1/callback
+      translate:
+    transitions:
+      actions:
+        pass: output
+        fail: exit
+  output:
+    component: "System.Output"
+    properties:
+      text: "${name.value}, has Ingresado al Portal Transaccional"
+      keepTurn: true
+    transitions:
+      next: cardResponse
+
+  cardResponse:
+    component: "System.CommonResponse"
+    properties:
+      # set processUserMessage to true if the dialog flow should return to this state after receiving the user’s message.
+      processUserMessage: true
+      # translate property allows you to override the global AutoTranslate variable. If set to true, then both the bot’s and the user’s messages are auto-translated from English to the user’s language and vice versa. 
+      translate:
+     # metadata property specifies the structure of the bot response message(s) that are sent to the user. You can define text, card, and attachment message types, add actions to text and card messages, and specify global actions that typically appear at the bottom of the chat window.
+      metadata: 
+        responseItems:         
+        - type: "cards" 
+          # cardLayout can be vertical or horizontal. 
+          cardLayout: "horizontal"
+          cards:
+          - title: "Mis Saldos"
+            description: "Acceso a tus saldos"
+            imageUrl: "http://www.tuya.com.co/img/portadate.jpg"
+            #cardUrl: "http://www.oracle.com"
+            # iteratorVariable (optional) should point to a variable that holds a list of objects (a JSON array). A card is created for each object. Use FreeMarker expressions in the card and card action properties to reference the property values of each object.
+            iteratorVariable: 
+            # To implement pagination for your cards, you can use the rangeStart and rangeSize properties. The rangeStart property should reference a variable that you initially set to "0". 
+            rangeStart:
+            rangeSize:
+            visible: 
+              # boolean FreeMarker expression to conditionally show/hide the card.
+              expression:            
+              # comma-delimited list of channel types for which the card should be shown (include) or hidden (exclude). Allowable values are: facebook, webhook, web, android, ios, twilio, kakaotalk and test.
+              channels:
+                include:
+                exclude:  
+            # actions defined here are added to the card.  
+            actions: 
+            - label: "Ver Saldos"
+              # action type allowable values are: postback, url, share, call, location.
+              type: "postback"
+              # when the user enters the keyword (optional), this has same effect as tapping the action button. Only applicable to postback actions. 
+              keyword: 
+              payload: 
+                # Tapping the action button will trigger the state transition that maps to the value of the action property, if specified. Only applicable to postback action. 
+                action: "algo"  
+              
+              iteratorVariable: 
+              visible: 
+                # boolean FreeMarker expression to conditionally show/hide the action.
+                expression:            
+                # comma-delimited list of channel types for which the action should be shown (include) or hidden (exclude). Allowable values are: facebook, webhook, web, android, ios, twilio, kakaotalk and test.
+                channels:
+                  include:
+                  exclude: 
+                  
+          - title: "Pagos"
+            description: "Acceso a Pagos"
+            imageUrl: "http://www.tarjetaalkosto.com.co/sites/default/files/styles/banner_home/public/imagenes/banner_home/ff_corporativo_banner_02_avances.png"
+            #cardUrl: "http://www.oracle.com"
+            # iteratorVariable (optional) should point to a variable that holds a list of objects (a JSON array). A card is created for each object. Use FreeMarker expressions in the card and card action properties to reference the property values of each object.
+            iteratorVariable: 
+            # To implement pagination for your cards, you can use the rangeStart and rangeSize properties. The rangeStart property should reference a variable that you initially set to "0". 
+            rangeStart:
+            rangeSize:
+            visible: 
+              # boolean FreeMarker expression to conditionally show/hide the card.
+              expression:            
+              # comma-delimited list of channel types for which the card should be shown (include) or hidden (exclude). Allowable values are: facebook, webhook, web, android, ios, twilio, kakaotalk and test.
+              channels:
+                include:
+                exclude:  
+            # actions defined here are added to the card.  
+            actions: 
+            - label: "Ver Pagos"
+              # action type allowable values are: postback, url, share, call, location.
+              type: "postback"
+              # when the user enters the keyword (optional), this has same effect as tapping the action button. Only applicable to postback actions. 
+              keyword: 
+              payload: 
+                # Tapping the action button will trigger the state transition that maps to the value of the action property, if specified. Only applicable to postback action. 
+                action: "someAction"  
+                # Tapping the action button sets the context or user variables specified here (optional). Only applicable to postback action. 
+                variables: 
+                  user.someVariable: "someValue" 
+                #phoneNumber is only applicable with action type 'call'.
+                phoneNumber:
+                # url is only applicable with action type 'url'
+                url:
+            # iteratorVariable (optional) should point to a list variable that holds a list of objects (a JSON array). An action is created for each object. Use FreeMarker expressions in the label and payload properties to reference property values of each object.
+              iteratorVariable: 
+              visible: 
+                # boolean FreeMarker expression to conditionally show/hide the action.
+                expression:            
+                # comma-delimited list of channel types for which the action should be shown (include) or hidden (exclude). Allowable values are: facebook, webhook, web, android, ios, twilio, kakaotalk and test.
+                channels:
+                  include:
+                  exclude:   
+          - title: "Transferencias"
+            description: "Acceso a Pagos"
+            imageUrl: "http://www.tuya.com.co/img/Banner_CHEF_EN_CASA.jpg"
+            #cardUrl: "http://www.oracle.com"
+            # iteratorVariable (optional) should point to a variable that holds a list of objects (a JSON array). A card is created for each object. Use FreeMarker expressions in the card and card action properties to reference the property values of each object.
+            iteratorVariable: 
+            # To implement pagination for your cards, you can use the rangeStart and rangeSize properties. The rangeStart property should reference a variable that you initially set to "0". 
+            rangeStart:
+            rangeSize:
+            visible: 
+              # boolean FreeMarker expression to conditionally show/hide the card.
+              expression:            
+              # comma-delimited list of channel types for which the card should be shown (include) or hidden (exclude). Allowable values are: facebook, webhook, web, android, ios, twilio, kakaotalk and test.
+              channels:
+                include:
+                exclude:  
+            # actions defined here are added to the card.  
+            actions: 
+            - label: "Ingresar"
+              # action type allowable values are: postback, url, share, call, location.
+              type: "postback"
+              # when the user enters the keyword (optional), this has same effect as tapping the action button. Only applicable to postback actions. 
+              keyword: 
+              payload: 
+                # Tapping the action button will trigger the state transition that maps to the value of the action property, if specified. Only applicable to postback action. 
+                action: "algo"  
+                # Tapping the action button sets the context or user variables specified here (optional). Only applicable to postback action. 
+               # variables: 
+                #  user.someVariable: "someValue" 
+                #phoneNumber is only applicable with action type 'call'.
+                # url is only applicable with action type 'url'
+            # iteratorVariable (optional) should point to a list variable that holds a list of objects (a JSON array). An action is created for each object. Use FreeMarker expressions in the label and payload properties to reference property values of each object.
+              iteratorVariable: 
+              visible: 
+                # boolean FreeMarker expression to conditionally show/hide the action.
+                expression:            
+                # comma-delimited list of channel types for which the action should be shown (include) or hidden (exclude). Allowable values are: facebook, webhook, web, android, ios, twilio, kakaotalk and test.
+                channels:
+                  include:
+                  exclude:   
+              
+          # actions defined here appear at the bottom of the card list.   
+          actions: []
+        # global actions are defined the same way as text or card actions and appear at the bottom of the chat window.    
+        globalActions: []
+    transitions:
+      actions:
+       algo: "exit" 
+  exit:
+    component: "System.Output"
+    properties:
+      keepTurn: true
+      text: "El cupo disponible de tu Tarjeta Exito MasterCard es de $650.000 pesos"
+    transitions:
+      next: "messague" 
+
+  messague:
+    component: "System.Output"
+    properties:
+      keepTurn: true
+      text: "${name.value} has tenido un buen manejo de tu Tarjeta de Crédito"
+    transitions:
+      next: "actionList"         
+       
+  actionList:
+    component: "System.List"
+    properties: 
+      prompt: "Te ofrecemos un aumento del cupo de Tu Tarjeta de Crédito en $1´000.000 para hacer realidad tus sueños"
+      options: 
+      - label: "Aceptar"
+        value: "action1" 
+      - label: "Rechazar"
+        value: "action2" 
+      translate:
+    transitions:
+      actions:
+        next: "byee"
+
+  byee:
+    component: "System.Output"
+    properties:
+      keepTurn: true
+      text: "Se ha ampliado el cupo de tu Tarjeta de Crédito"
+    transitions:
+      next: "successs"
+      
+  successs:
+    component: "System.CommonResponse"
+    properties:
+      # set processUserMessage to true if the dialog flow should return to this state after receiving the user’s message.
+      processUserMessage: true
+      # translate property allows you to override the global AutoTranslate variable. If set to true, then both the bot’s and the user’s messages are auto-translated from English to the user’s language and vice versa. 
+      translate:
+     # metadata property specifies the structure of the bot response message(s) that are sent to the user. You can define text, card, and attachment message types, add actions to text and card messages, and specify global actions that typically appear at the bottom of the chat window.
+      metadata: 
+        responseItems:         
+        - type: "cards" 
+          # cardLayout can be vertical or horizontal. 
+          cardLayout: "horizontal"
+          cards:
+          - title: "Mis Saldos"
+            description: "Acceso a tus saldos"
+            imageUrl: "http://www.tuya.com.co/img/portadate.jpg"
+            #cardUrl: "http://www.oracle.com"
+            # iteratorVariable (optional) should point to a variable that holds a list of objects (a JSON array). A card is created for each object. Use FreeMarker expressions in the card and card action properties to reference the property values of each object.
+            iteratorVariable: 
+            # To implement pagination for your cards, you can use the rangeStart and rangeSize properties. The rangeStart property should reference a variable that you initially set to "0". 
+            rangeStart:
+            rangeSize:
+            visible: 
+              # boolean FreeMarker expression to conditionally show/hide the card.
+              expression:            
+              # comma-delimited list of channel types for which the card should be shown (include) or hidden (exclude). Allowable values are: facebook, webhook, web, android, ios, twilio, kakaotalk and test.
+              channels:
+                include:
+                exclude:  
+            # actions defined here are added to the card.  
+            actions: 
+            - label: "Ver Saldos"
+              # action type allowable values are: postback, url, share, call, location.
+              type: "postback"
+              # when the user enters the keyword (optional), this has same effect as tapping the action button. Only applicable to postback actions. 
+              keyword: 
+              payload: 
+                # Tapping the action button will trigger the state transition that maps to the value of the action property, if specified. Only applicable to postback action. 
+                action: "algo"  
+              
+              iteratorVariable: 
+              visible: 
+                # boolean FreeMarker expression to conditionally show/hide the action.
+                expression:            
+                # comma-delimited list of channel types for which the action should be shown (include) or hidden (exclude). Allowable values are: facebook, webhook, web, android, ios, twilio, kakaotalk and test.
+                channels:
+                  include:
+                  exclude: 
+                  
+          - title: "Pagos"
+            description: "Acceso a Pagos"
+            imageUrl: "http://www.tarjetaalkosto.com.co/sites/default/files/styles/banner_home/public/imagenes/banner_home/ff_corporativo_banner_02_avances.png"
+            #cardUrl: "http://www.oracle.com"
+            # iteratorVariable (optional) should point to a variable that holds a list of objects (a JSON array). A card is created for each object. Use FreeMarker expressions in the card and card action properties to reference the property values of each object.
+            iteratorVariable: 
+            # To implement pagination for your cards, you can use the rangeStart and rangeSize properties. The rangeStart property should reference a variable that you initially set to "0". 
+            rangeStart:
+            rangeSize:
+            visible: 
+              # boolean FreeMarker expression to conditionally show/hide the card.
+              expression:            
+              # comma-delimited list of channel types for which the card should be shown (include) or hidden (exclude). Allowable values are: facebook, webhook, web, android, ios, twilio, kakaotalk and test.
+              channels:
+                include:
+                exclude:  
+            # actions defined here are added to the card.  
+            actions: 
+            - label: "Ver Pagos"
+              # action type allowable values are: postback, url, share, call, location.
+              type: "postback"
+              # when the user enters the keyword (optional), this has same effect as tapping the action button. Only applicable to postback actions. 
+              keyword: 
+              payload: 
+                # Tapping the action button will trigger the state transition that maps to the value of the action property, if specified. Only applicable to postback action. 
+                action: "someAction"  
+                # Tapping the action button sets the context or user variables specified here (optional). Only applicable to postback action. 
+                variables: 
+                  user.someVariable: "someValue" 
+                #phoneNumber is only applicable with action type 'call'.
+                phoneNumber:
+                # url is only applicable with action type 'url'
+                url:
+            # iteratorVariable (optional) should point to a list variable that holds a list of objects (a JSON array). An action is created for each object. Use FreeMarker expressions in the label and payload properties to reference property values of each object.
+              iteratorVariable: 
+              visible: 
+                # boolean FreeMarker expression to conditionally show/hide the action.
+                expression:            
+                # comma-delimited list of channel types for which the action should be shown (include) or hidden (exclude). Allowable values are: facebook, webhook, web, android, ios, twilio, kakaotalk and test.
+                channels:
+                  include:
+                  exclude:   
+          - title: "Transferencias"
+            description: "Acceso a Pagos"
+            imageUrl: "http://www.tuya.com.co/img/Banner_CHEF_EN_CASA.jpg"
+            #cardUrl: "http://www.oracle.com"
+            # iteratorVariable (optional) should point to a variable that holds a list of objects (a JSON array). A card is created for each object. Use FreeMarker expressions in the card and card action properties to reference the property values of each object.
+            iteratorVariable: 
+            # To implement pagination for your cards, you can use the rangeStart and rangeSize properties. The rangeStart property should reference a variable that you initially set to "0". 
+            rangeStart:
+            rangeSize:
+            visible: 
+              # boolean FreeMarker expression to conditionally show/hide the card.
+              expression:            
+              # comma-delimited list of channel types for which the card should be shown (include) or hidden (exclude). Allowable values are: facebook, webhook, web, android, ios, twilio, kakaotalk and test.
+              channels:
+                include:
+                exclude:  
+            # actions defined here are added to the card.  
+            actions: 
+            - label: "Ingresar"
+              # action type allowable values are: postback, url, share, call, location.
+              type: "postback"
+              # when the user enters the keyword (optional), this has same effect as tapping the action button. Only applicable to postback actions. 
+              keyword: 
+              payload: 
+                # Tapping the action button will trigger the state transition that maps to the value of the action property, if specified. Only applicable to postback action. 
+                action: "algo"  
+                # Tapping the action button sets the context or user variables specified here (optional). Only applicable to postback action. 
+               # variables: 
+                #  user.someVariable: "someValue" 
+                #phoneNumber is only applicable with action type 'call'.
+                # url is only applicable with action type 'url'
+            # iteratorVariable (optional) should point to a list variable that holds a list of objects (a JSON array). An action is created for each object. Use FreeMarker expressions in the label and payload properties to reference property values of each object.
+              iteratorVariable: 
+              visible: 
+                # boolean FreeMarker expression to conditionally show/hide the action.
+                expression:            
+                # comma-delimited list of channel types for which the action should be shown (include) or hidden (exclude). Allowable values are: facebook, webhook, web, android, ios, twilio, kakaotalk and test.
+                channels:
+                  include:
+                  exclude:   
+              
+          # actions defined here appear at the bottom of the card list.   
+          actions: []
+        # global actions are defined the same way as text or card actions and appear at the bottom of the chat window.    
+        globalActions: []
+    transitions:
+      actions:
+       algo: "algunooo"       
+  algunooo:
+    component: "System.Output"
+    properties:
+      keepTurn: true
+      text: "El cupo disponible de tu Tarjeta Exito MasterCard es de      $1´650.000 pesos"
+    transitions:
+      return: "done" 
+      
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+metadata:
+  platformVersion: "1.1"
+main: true
+name: "Inscripcion"
+context:
+  variables:
+    iresult: "nlpresult"
+    nombre: "string"
+    programa: "string"
+    iResult: "nlpresult"
+    autoTranslate: "boolean" 
+    translated: "string"  
+defaultTransitions:
+  error: "DefaultErrorHandler"
+  actions:
+    unexpectedAction: "HandleUnexpectedAction"
+states:
+  setAutoTranslate:
+    component: "System.SetVariable"
+    properties:
+      variable: "autoTranslate"
+      value: true
+    transitions: {}
+  detect:
+    component: "System.DetectLanguage"
+    properties: {}
+    transitions: {}
+  translate:
+    component: "System.TranslateInput"
+    properties:
+      variable: "translated"
+    transitions: {}
+  Intent:
+    component: "System.Intent"
+    properties:
+      confidenceThreshold: 0.5
+      variable: "iresult"
+      sourceVariable: "translated"
+    transitions:
+      actions:
+        unresolvedIntent: "Unresolved"
+        Saludar: "Saludar"
+        Despedirse: "Despedirse"
+        Agradecer: "Agradecer"
+  Unresolved:
+    component: "System.CommonResponse"
+    properties:
+      metadata:
+        responseItems:
+        - type: "text"
+          text: "Lo siento, no entiendo que necesita. No soy un humano, por favor intente de nuevo."
+          name: "Sorry"
+          separateBubbles: true
+      processUserMessage: false
+    transitions:
+      return: "done"
+  Saludar:
+    component: "System.Text"
+    properties:
+      prompt: "Hola, ¿Cual es tu nombre?"
+      variable: "nombre"
+  SaludarNombre:
+    component: "System.CommonResponse"
+    properties:
+      metadata:
+        responseItems:
+        - type: "text"
+          text: "Hola ${nombre}, en que te puedo ayudar hoy:"
+          name: "hello"
+          separateBubbles: true
+          actions:
+          - label: "Tengo un problema al diligenciar el formulario de inscripción"
+            keyword: "1"
+            type: "postback"
+            payload:
+              action: "problema"
+            name: "Problema"
+          - label: "No me recuerdo de mi clave de ingreso al formulario"
+            keyword: "2"
+            type: "postback"
+            payload:
+              action: "clave"
+            name: "Clave"
+          - label: "No sé a qué programa inscribirme"
+            keyword: "3"
+            type: "postback"
+            payload:
+              action: "programa"
+            name: "Programa"
+      processUserMessage: true
+    transitions:
+      actions:
+        clave: "clave"
+        problema: "problema"
+        programa: "programa"
+        textReceived: "Intent"
+  clave:
+    component: "System.Output"
+    properties:
+      text: "Para recuperar tu clave debes contactarte a la mesa de ayuda al correo: service.desk@hotmail.com o al teléfono 8760000 Ext 345."
+    transitions:
+      return: "done"
+  problema:
+    component: "System.Output"
+    properties:
+      text: "Para solucionar el problema..."
+    transitions:
+      return: "done"
+  programa:
+    component: "System.CommonResponse"
+    properties:
+      metadata:
+        responseItems:
+        - type: "text"
+          text: "Actualmente tenemos las siguientes áreas de educación disponibles:"
+          name: "hello"
+          separateBubbles: true
+          actions:
+          - label: "Ingenierías"
+            keyword: "1"
+            type: "postback"
+            payload:
+              action: "ingenierias"
+            name: "Ingenierias"
+          - label: "Derecho y Ciencias Políticas"
+            keyword: "2"
+            type: "postback"
+            payload:
+              action: "derecho"
+            name: "Derecho"
+          - label: "Salud"
+            keyword: "3"
+            type: "postback"
+            payload:
+              action: "salud"
+            name: "Salud"
+      processUserMessage: true
+    transitions:
+      actions:
+        clave: "clave"
+        problema: "problema"
+        programa: "programa"
+        textReceived: "Intent"
+  Despedirse:
+    component: "System.Output"
+    properties:
+      text: "Hasta pronto."
+    transitions:
+      return: "done"
+  Agradecer:
+    component: "System.Output"
+    properties:
+      text: "Es un gusto poder ayudarte."
+    transitions:
+      return: "done"
+  HandleUnexpectedAction:
+    component: "System.Switch"
+    properties:
+      variable: "system.unexpectedAction"
+      values:
+      - "pizza"
+      - "pasta"
+      - "order"
+    transitions:
+      return: "done"
+  DefaultErrorHandler:
+    component: "System.Output"
+    properties:
+      text: "Ha ocurrido un error, por favor contacte a la mesa de ayuda al correo: service.desk@hotmail.com o al teléfono 8760000 Ext 345."
+    transitions:
+      return: "done"
