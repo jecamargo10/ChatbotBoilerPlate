@@ -48,7 +48,15 @@ module.exports = function(service) {
 		)
 	});
 
+	service.get('/mobile/custom/ConnectorProcess/getPuntos', function(req,res) {
+		req.oracleMobile.connectors.getTerpelMiles.get('',null, {qs:{id:req.query.id} }).then(
+			function(result){
+				var statusCode = 200;
+				res.status(statusCode).send(result.result);
+			}
 
+		)
+	});
 
 
 	service.post('/mobile/custom/ConnectorProcess/components/:componentName', function(req,res) {

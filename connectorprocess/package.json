@@ -7,7 +7,8 @@
     "dependencies": {
       "apis": {},
       "connectors": {
-        "/mobile/connector/GetPerson": "1.0"
+        "/mobile/connector/GetPerson": "1.0",
+        "/mobile/connector/getTerpelMiles": "1.0"
       }
     }
   }
